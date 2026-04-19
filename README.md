@@ -337,7 +337,7 @@ const { token, setToken } = use(themeContext);
 
 # Examples
 
-You can view the [Live Example](https://next-tokens.vercel.app).
+You can view the [Live Example](https://next-tokens-example.vercel.app).
 
 ## Example - System Preference
 
