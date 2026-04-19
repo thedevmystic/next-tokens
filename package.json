@@ -4,7 +4,7 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "build": "turbo build",
-    "build:example": "next build example",
+    "build:package": "turbo build:package",
     "dev": "turbo dev",
     "test:unit": "turbo test:unit",
     "test:e2e": "turbo test:e2e",

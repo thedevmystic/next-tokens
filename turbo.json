@@ -4,13 +4,13 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["example"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "build:package": {
+      "dependsOn": ["^build"],
       "inputs": ["next-tokens/src/**", "next-tokens/tsup.config.ts", "next-tokens/tsconfig.json", "tsconfig.json"],
       "outputs": ["next-tokens/dist/**"]
-    },
-    "build:example": {
-      "dependsOn": ["^build"],
-      "inputs": ["example"],
-      "outputs": ["example/dist/**"]
     },
     "type-check": {
       "cache": true
