@@ -62,6 +62,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/thedevmystic/next-tokens.git"
+    "url": "git+https://github.com/thedevmystic/next-tokens.git"
   }
 }
