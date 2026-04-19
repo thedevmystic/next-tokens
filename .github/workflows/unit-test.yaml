@@ -1,0 +1,33 @@
+# Unit Test for next-tokens
+# author: thedevmystic (Surya) <thedevmystic@gmail.com>
+
+name: Test - Unit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+
+      - run: pnpm install
+        env:
+          CI: true
+
+      - name: Run tests
+        run: pnpm --filter next-tokens test

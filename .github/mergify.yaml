@@ -1,0 +1,54 @@
+# -----------------------------------------------------------------------------
+# Copyright 2026-present Suryansh Singh
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# -----------------------------------------------------------------------------
+# @path [ROOT]/.github/mergify.yaml
+# @file mergify.yaml
+# @brief Mergify configuration file.
+#
+# @author thedevmystic (Surya) <thedevmystic@gmail.com>
+# @copyright 2026-present Suryansh Singh Apache-2.0 License
+#
+# SPDX-FileCopyrightText: 2026-present Suryansh Singh
+# SPDX-License-Identifier: Apache-2.0
+# -----------------------------------------------------------------------------
+
+pull_request_rules:
+  - name: Ask to resolve conflict
+    conditions:
+      - conflict
+      - author!=mergify[bot]
+      - author!=dependabot[bot]
+    actions:
+        comment:
+          message: This pull request is in conflict. Could you fix it @{{author}}?
+
+  - name: Ask to resolve conflict for other branches
+    conditions:
+      - conflict
+      - author=mergify[bot]
+    actions:
+        comment:
+          message: This pull request is in conflict. Could you fix it @thedevmystic?
+
+  - name: Development targets main branch
+    conditions:
+      - base!=main
+      - author!=mergify[bot]
+      - author!=dependabot[bot]
+    actions:
+        comment:
+          message: |
+            @{{author}}, all pull requests must be targeted towards the `main` development branch.
+            Once merged into `main`, it is possible to apply changes to `{{base}}`, but it must be in
+            `main` to have these changes reflected into new releases.

@@ -1,0 +1,25 @@
+{
+  "name": "next-tokens-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build": "turbo build",
+    "build:example": "next build example",
+    "dev": "turbo dev",
+    "test:unit": "turbo test:unit",
+    "test:e2e": "turbo test:e2e",
+    "test": "turbo test:unit && turbo test:e2e",
+    "type-check": "turbo type-check",
+    "lint": "prettier . --write",
+    "prepublishOnly": "pnpm lint && pnpm type-check && pnpm build && pnpm test"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.6"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,json,md}": "turbo lint"
+  }
+}

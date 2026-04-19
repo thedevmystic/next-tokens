@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["next-tokens/src/**", "next-tokens/tsup.config.ts", "next-tokens/tsconfig.json", "tsconfig.json"],
+      "outputs": ["next-tokens/dist/**"]
+    },
+    "build:example": {
+      "dependsOn": ["^build"],
+      "inputs": ["example"],
+      "outputs": ["example/dist/**"]
+    },
+    "type-check": {
+      "cache": true
+    },
+    "test:unit": {
+      "dependsOn": ["build"],
+      "inputs": ["next-tokens/src/**", "next-tokens/tests/**", "next-tokens/vitest.config.ts"],
+      "cache": false,
+      "outputs": []
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "inputs": ["example/src/**", "example/tests/**", "playwright.config.ts"],
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "cache": true
+    }
+  }
+}

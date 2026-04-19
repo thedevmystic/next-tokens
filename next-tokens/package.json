@@ -1,0 +1,67 @@
+{
+  "name": "next-tokens",
+  "version": "1.0.0",
+  "description": "Multi-instance token provider for React 18+ supporting theme, accent, and beyond.",
+  "license": "Apache-2.0",
+  "author": "Suryansh Singh (thedevmystic)",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "type-check": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test": "pnpm test:unit"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.26",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/ui": "^4.1.4",
+    "jsdom": "^29.0.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "theme",
+    "tokens",
+    "dark-mode",
+    "multi-instance",
+    "fouc-prevention"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thedevmystic/next-tokens.git"
+  }
+}

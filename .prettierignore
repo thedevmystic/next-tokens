@@ -1,0 +1,48 @@
+# --- Package Manager & System ---
+node_modules
+.pnpm-store
+.npm
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+.DS_Store
+*.log
+
+# --- Next.js Specific ---
+.next/
+out/
+build/
+dist/
+
+# --- Environment & Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.crt
+
+# --- Documentation & Metadata ---
+CHANGELOG.md
+.github/
+.vscode/
+.idea/
+
+# --- Type Generation & Tooling ---
+.cache/
+.turbo/
+coverage/
+*.lcov
+.nyc_output
+
+# --- Static Assets ---
+public/
+*.svg
+*.ico
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.json
+
+# --- React/Next Component Specific ---
+*.d.ts

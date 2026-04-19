@@ -1,0 +1,39 @@
+# --- Package Manager & System ---
+node_modules
+.pnpm-store
+.npm
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+.DS_Store
+*.log
+
+# --- Next.js Specific ---
+.next/
+out/
+build/
+dist/
+*.d.ts
+
+# --- Environment & Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.crt
+
+# --- Type Generation & Tooling ---
+.cache/
+.turbo/
+coverage/
+*.lcov
+.nyc_output
+tsconfig.tsbuildinfo
+
+# --- Playwright ---
+bin/
+browser-snapshots/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
