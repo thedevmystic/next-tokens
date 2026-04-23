@@ -11,7 +11,8 @@
     "test": "turbo test:unit && turbo test:e2e",
     "type-check": "turbo type-check",
     "lint": "prettier . --write",
-    "prepublishOnly": "pnpm lint && pnpm type-check && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm lint && pnpm type-check && pnpm build && pnpm test",
+    "prepare": "husky"
   },
   "devDependencies": {
     "husky": "^9.1.7",
