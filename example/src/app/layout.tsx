@@ -38,16 +38,11 @@ import '@example/styles/main.css';
 /** Metadata */
 export const metadata: Metadata = {
   title: 'next-tokens · example',
-  description:
-    'A multi-instance React token provider with typed hooks and zero FOUC.',
+  description: 'A multi-instance React token provider with typed hooks and zero FOUC.',
 };
 
 /** Layout */
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -69,9 +64,7 @@ export default function RootLayout({
 
               {/* Footer */}
               <footer className="layout-footer">
-                <span className="layout-footer-text">
-                  thedevmystic · Apache-2.0 License
-                </span>
+                <span className="layout-footer-text">thedevmystic · Apache-2.0 License</span>
                 <span className="layout-footer-text">next-tokens v1.0.0</span>
               </footer>
             </div>

@@ -48,8 +48,7 @@ export const script = (
 
     attributes.forEach((attr) => {
       const isClass = attr === 'class';
-      const classes =
-        isClass && value ? tokens.map((t) => value[t] ?? t) : tokens;
+      const classes = isClass && value ? tokens.map((t) => value[t] ?? t) : tokens;
 
       if (isClass) {
         el.classList.remove(...classes);
@@ -69,9 +68,7 @@ export const script = (
   }
 
   function getSystemToken(): string {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 
   if (forcedToken) {
@@ -79,8 +76,7 @@ export const script = (
   } else {
     try {
       const stored = localStorage.getItem(storageKey) ?? defaultToken;
-      const resolved =
-        enableSystem && stored === 'system' ? getSystemToken() : stored;
+      const resolved = enableSystem && stored === 'system' ? getSystemToken() : stored;
       updateDOM(resolved);
     } catch {
       // localStorage unavailable (SSR, private browsing, etc.)

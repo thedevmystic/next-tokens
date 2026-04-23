@@ -28,10 +28,7 @@
 import { script } from '../src/script';
 
 /** Build a minimal DOM environment substitute for each test. */
-function buildDOM(
-  initialClasses: string[] = [],
-  initialAttrs: Record<string, string> = {},
-) {
+function buildDOM(initialClasses: string[] = [], initialAttrs: Record<string, string> = {}) {
   const classList = new Set<string>(initialClasses);
   const attributes = new Map<string, string>(Object.entries(initialAttrs));
   const style: Record<string, string> = {};
@@ -86,10 +83,7 @@ function runScript(
   };
 
   const mockMatchMedia = (query: string) => ({
-    matches:
-      query === '(prefers-color-scheme: dark)'
-        ? (opts.systemDark ?? false)
-        : false,
+    matches: query === '(prefers-color-scheme: dark)' ? (opts.systemDark ?? false) : false,
   });
 
   // Save originals
@@ -191,16 +185,7 @@ describe('script – data attribute mode', () => {
 describe('script – forcedToken', () => {
   test('uses forcedToken instead of stored value', () => {
     const dom = runScript(
-      [
-        'data-theme',
-        'theme',
-        'light',
-        'dark',
-        ['light', 'dark'],
-        undefined,
-        false,
-        true,
-      ],
+      ['data-theme', 'theme', 'light', 'dark', ['light', 'dark'], undefined, false, true],
       { storedValue: 'light' },
     );
     expect(dom.getAttr('data-theme')).toBe('dark');
@@ -208,16 +193,7 @@ describe('script – forcedToken', () => {
 
   test('forcedToken sets colorScheme', () => {
     const dom = runScript(
-      [
-        'data-theme',
-        'theme',
-        'light',
-        'dark',
-        ['light', 'dark'],
-        undefined,
-        false,
-        true,
-      ],
+      ['data-theme', 'theme', 'light', 'dark', ['light', 'dark'], undefined, false, true],
       {},
     );
     expect(dom.getStyle().colorScheme).toBe('dark');
@@ -263,16 +239,7 @@ describe('script – enableSystem', () => {
   test('does not resolve "system" when enableSystem is false', () => {
     // stored value is 'system' but enableSystem=false → applies 'system' literally
     const dom = runScript(
-      [
-        'data-theme',
-        'theme',
-        'light',
-        undefined,
-        ['light', 'dark'],
-        undefined,
-        false,
-        true,
-      ],
+      ['data-theme', 'theme', 'light', undefined, ['light', 'dark'], undefined, false, true],
       { storedValue: 'system', systemDark: true },
     );
     // 'system' is not in the COLOR_SCHEMES array, so colorScheme should not be set
@@ -288,16 +255,7 @@ describe('script – enableSystem', () => {
 describe('script – class attribute mode', () => {
   test('adds the correct class for stored token', () => {
     const dom = runScript(
-      [
-        'class',
-        'theme',
-        'light',
-        undefined,
-        ['light', 'dark'],
-        undefined,
-        false,
-        true,
-      ],
+      ['class', 'theme', 'light', undefined, ['light', 'dark'], undefined, false, true],
       { storedValue: 'dark' },
     );
     expect(dom.getClasses()).toContain('dark');
@@ -340,16 +298,7 @@ describe('script – class attribute mode', () => {
       configurable: true,
     });
 
-    script(
-      'class',
-      'theme',
-      'light',
-      undefined,
-      ['light', 'dark'],
-      undefined,
-      false,
-      true,
-    );
+    script('class', 'theme', 'light', undefined, ['light', 'dark'], undefined, false, true);
 
     Object.defineProperty(globalThis, 'document', {
       value: origDocument,

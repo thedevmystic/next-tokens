@@ -49,9 +49,7 @@ export interface ScriptProps extends ComponentPropsWithoutRef<'script'> {
 /**
  * The type of the setToken function returned by the hook.
  */
-export type TokenSetter<T extends string> = (
-  value: T | ((prev: T) => T),
-) => void;
+export type TokenSetter<T extends string> = (value: T | ((prev: T) => T)) => void;
 
 /**
  * The shape of the object returned by the useToken hook.

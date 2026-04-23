@@ -31,13 +31,12 @@ import { createTokenProvider } from 'next-tokens';
 
 type ThemeClass = 'light' | 'dark' | 'system';
 
-const { Provider: ThemeClassProvider, useToken: useThemeClass } =
-  createTokenProvider<ThemeClass>({
-    storageKey: 'theme-class',
-    attribute: 'class',
-    defaultToken: 'system',
-    tokens: ['light', 'dark'],
-  });
+const { Provider: ThemeClassProvider, useToken: useThemeClass } = createTokenProvider<ThemeClass>({
+  storageKey: 'theme-class',
+  attribute: 'class',
+  defaultToken: 'system',
+  tokens: ['light', 'dark'],
+});
 
 function ThemeClassTestContent() {
   const { setToken, token } = useThemeClass();
@@ -46,8 +45,7 @@ function ThemeClassTestContent() {
     <div style={{ padding: '2rem' }}>
       <h1>Class Attribute Test</h1>
       <p>
-        Current Theme Class:{' '}
-        <strong data-testid="current-theme">{token}</strong>
+        Current Theme Class: <strong data-testid="current-theme">{token}</strong>
       </p>
       <button data-testid="theme-light" onClick={() => setToken('light')}>
         Light

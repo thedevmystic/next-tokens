@@ -48,10 +48,7 @@ export default function AccentTestPage() {
       </div>
 
       <div className="accent-controls" style={{ marginTop: '1rem' }}>
-        <button
-          data-testid="accent-terracotta"
-          onClick={() => setAccent('terracotta')}
-        >
+        <button data-testid="accent-terracotta" onClick={() => setAccent('terracotta')}>
           Terracotta Accent
         </button>
         <button data-testid="accent-sage" onClick={() => setAccent('sage')}>

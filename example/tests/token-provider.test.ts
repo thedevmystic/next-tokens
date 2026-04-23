@@ -43,18 +43,11 @@ async function getColorScheme(page: Page): Promise<string> {
   return page.evaluate(() => document.documentElement.style.colorScheme);
 }
 
-async function getLocalStorage(
-  page: Page,
-  key: string,
-): Promise<string | null> {
+async function getLocalStorage(page: Page, key: string): Promise<string | null> {
   return page.evaluate((k) => localStorage.getItem(k), key);
 }
 
-async function setLocalStorage(
-  page: Page,
-  key: string,
-  value: string,
-): Promise<void> {
+async function setLocalStorage(page: Page, key: string, value: string): Promise<void> {
   await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, value]);
 }
 
@@ -99,9 +92,7 @@ test.describe('TokenProvider – theme page', () => {
     expect(scheme).toBe('dark');
   });
 
-  test('switching theme updates data attribute immediately', async ({
-    page,
-  }) => {
+  test('switching theme updates data attribute immediately', async ({ page }) => {
     await page.getByRole('button', { name: /light/i }).click();
     const attr = await getHtmlAttr(page, 'data-theme');
     expect(attr).toBe('light');
@@ -134,9 +125,7 @@ test.describe('TokenProvider – system preference', () => {
     expect(attr).toBe('light');
   });
 
-  test('updates attribute when OS color-scheme changes at runtime', async ({
-    page,
-  }) => {
+  test('updates attribute when OS color-scheme changes at runtime', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto(`${BASE_URL}/tests/theme`);
     await setLocalStorage(page, 'theme', 'system');
@@ -271,9 +260,7 @@ test.describe('TokenProvider – disableTransitionOnChange', () => {
       const all = Array.from(document.styleSheets);
       return all.every((sheet) => {
         try {
-          return Array.from(sheet.cssRules).every(
-            (r) => !r.cssText.includes('transition:none'),
-          );
+          return Array.from(sheet.cssRules).every((r) => !r.cssText.includes('transition:none'));
         } catch {
           return true;
         }
@@ -327,8 +314,7 @@ test.describe('TokenProvider – inline script FOUC prevention', () => {
     // This route should render TokenProvider with nonce="test-nonce"
     await page.goto(`${BASE_URL}/tests/theme-nonce`);
     const nonce = await page.evaluate(
-      () =>
-        document.querySelector('script[nonce]')?.getAttribute('nonce') ?? null,
+      () => document.querySelector('script[nonce]')?.getAttribute('nonce') ?? null,
     );
     // In the browser the nonce attribute is cleared for security, so we just
     // confirm the script tag exists (nonce stripping is browser behaviour)

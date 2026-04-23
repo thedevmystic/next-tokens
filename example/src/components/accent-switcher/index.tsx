@@ -78,9 +78,7 @@ export function AccentSwitcher() {
     const pill = pillRef.current;
     if (!root || !pill) return;
 
-    const active = root.querySelector<HTMLButtonElement>(
-      `button[data-value="${token}"]`,
-    );
+    const active = root.querySelector<HTMLButtonElement>(`button[data-value="${token}"]`);
     if (!active) return;
 
     const rootRect = root.getBoundingClientRect();
@@ -108,8 +106,7 @@ export function AccentSwitcher() {
       if (nextSegment) setToken(nextSegment.value);
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
-      const prevSegment =
-        SEGMENTS[(idx - 1 + SEGMENTS.length) % SEGMENTS.length];
+      const prevSegment = SEGMENTS[(idx - 1 + SEGMENTS.length) % SEGMENTS.length];
       if (prevSegment) setToken(prevSegment.value);
     }
   };
@@ -146,9 +143,7 @@ export function AccentSwitcher() {
             style={
               {
                 '--swatch-color':
-                  theme == 'light'
-                    ? ACCENT_COLORS_LIGHT[value]
-                    : ACCENT_COLORS_DARK[value],
+                  theme == 'light' ? ACCENT_COLORS_LIGHT[value] : ACCENT_COLORS_DARK[value],
               } as React.CSSProperties
             }
             onClick={() => setToken(value)}

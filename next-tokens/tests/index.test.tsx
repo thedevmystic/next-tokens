@@ -77,8 +77,7 @@ beforeEach(() => {
 
 /** Consumer Components. */
 function TokenDisplay({ storageKey = 'token' }: { storageKey?: string }) {
-  const { token, resolvedToken, tokens, setToken, systemToken } =
-    useToken(storageKey);
+  const { token, resolvedToken, tokens, setToken, systemToken } = useToken(storageKey);
   return (
     <div>
       <span data-testid="token">{token}</span>
@@ -86,9 +85,7 @@ function TokenDisplay({ storageKey = 'token' }: { storageKey?: string }) {
       <span data-testid="tokens">{tokens.join(',')}</span>
       <span data-testid="systemToken">{systemToken ?? 'none'}</span>
       <button onClick={() => setToken('dark')}>set dark</button>
-      <button
-        onClick={() => setToken((prev) => (prev === 'dark' ? 'light' : 'dark'))}
-      >
+      <button onClick={() => setToken((prev) => (prev === 'dark' ? 'light' : 'dark'))}>
         toggle
       </button>
     </div>
@@ -99,11 +96,7 @@ function TokenDisplay({ storageKey = 'token' }: { storageKey?: string }) {
 describe('TokenProvider – rendering', () => {
   test('renders children', () => {
     render(
-      <TokenProvider
-        storageKey="t1"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="t1" tokens={['light', 'dark']} enableSystem={false}>
         <span>hello</span>
       </TokenProvider>,
     );
@@ -113,16 +106,8 @@ describe('TokenProvider – rendering', () => {
   test('does not double-wrap the same storageKey', () => {
     // Both providers share the same key; the inner one is a no-op
     render(
-      <TokenProvider
-        storageKey="t2"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
-        <TokenProvider
-          storageKey="t2"
-          tokens={['light', 'dark']}
-          enableSystem={false}
-        >
+      <TokenProvider storageKey="t2" tokens={['light', 'dark']} enableSystem={false}>
+        <TokenProvider storageKey="t2" tokens={['light', 'dark']} enableSystem={false}>
           <TokenDisplay storageKey="t2" />
         </TokenProvider>
       </TokenProvider>,
@@ -136,11 +121,7 @@ describe('TokenProvider – rendering', () => {
 describe('TokenProvider – defaultToken', () => {
   test('uses first token as default when enableSystem=false', () => {
     render(
-      <TokenProvider
-        storageKey="dt1"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="dt1" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="dt1" />
       </TokenProvider>,
     );
@@ -176,11 +157,7 @@ describe('TokenProvider – setToken', () => {
   test('setToken(value) updates token', async () => {
     const user = userEvent.setup();
     render(
-      <TokenProvider
-        storageKey="st1"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="st1" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="st1" />
       </TokenProvider>,
     );
@@ -209,11 +186,7 @@ describe('TokenProvider – setToken', () => {
   test('setToken persists to localStorage', async () => {
     const user = userEvent.setup();
     render(
-      <TokenProvider
-        storageKey="persist1"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="persist1" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="persist1" />
       </TokenProvider>,
     );
@@ -227,11 +200,7 @@ describe('TokenProvider – localStorage hydration', () => {
   test('reads stored token on mount', async () => {
     localStorage.setItem('hydrate1', 'dark');
     render(
-      <TokenProvider
-        storageKey="hydrate1"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="hydrate1" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="hydrate1" />
       </TokenProvider>,
     );
@@ -291,9 +260,7 @@ describe('TokenProvider – DOM attribute', () => {
       </TokenProvider>,
     );
     await waitFor(() => {
-      expect(document.documentElement.getAttribute('data-theme')).toBe(
-        'theme-dark',
-      );
+      expect(document.documentElement.getAttribute('data-theme')).toBe('theme-dark');
     });
   });
 
@@ -347,11 +314,7 @@ describe('TokenProvider – enableSystem', () => {
 
   test('does not include "system" in tokens when enableSystem=false', () => {
     render(
-      <TokenProvider
-        storageKey="sys2"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="sys2" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="sys2" />
       </TokenProvider>,
     );
@@ -370,11 +333,7 @@ describe('TokenProvider – enableSystem', () => {
 
   test('systemToken is "none" when enableSystem=false', () => {
     render(
-      <TokenProvider
-        storageKey="sys4"
-        tokens={['light', 'dark']}
-        enableSystem={false}
-      >
+      <TokenProvider storageKey="sys4" tokens={['light', 'dark']} enableSystem={false}>
         <TokenDisplay storageKey="sys4" />
       </TokenProvider>,
     );
@@ -510,11 +469,7 @@ describe('TokenScript', () => {
   it('passes the correct options to preinit', () => {
     const scriptProps = { 'data-test': 'value' };
     render(
-      <TokenProvider
-        storageKey="theme"
-        nonce="test-nonce"
-        scriptProps={scriptProps}
-      >
+      <TokenProvider storageKey="theme" nonce="test-nonce" scriptProps={scriptProps}>
         <div>Children</div>
       </TokenProvider>,
     );
@@ -559,9 +514,7 @@ describe('TokenProvider – cross-tab storage sync', () => {
     );
 
     await act(async () => {
-      window.dispatchEvent(
-        new StorageEvent('storage', { key: 'cross1', newValue: 'dark' }),
-      );
+      window.dispatchEvent(new StorageEvent('storage', { key: 'cross1', newValue: 'dark' }));
     });
 
     await waitFor(() => {
@@ -582,9 +535,7 @@ describe('TokenProvider – cross-tab storage sync', () => {
     );
 
     await act(async () => {
-      window.dispatchEvent(
-        new StorageEvent('storage', { key: 'other-key', newValue: 'dark' }),
-      );
+      window.dispatchEvent(new StorageEvent('storage', { key: 'other-key', newValue: 'dark' }));
     });
 
     expect(screen.getByTestId('token').textContent).toBe('light');

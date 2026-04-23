@@ -59,22 +59,10 @@ function ThemeStats() {
         value={resolvedToken}
         sub="'system' resolved to OS preference"
       />
-      <StatCard
-        label="System Token"
-        value={systemToken ?? 'n/a'}
-        sub="OS prefers-color-scheme"
-      />
-      <StatCard
-        label="Tokens"
-        value={tokens.join(', ')}
-        sub="all available tokens"
-      />
+      <StatCard label="System Token" value={systemToken ?? 'n/a'} sub="OS prefers-color-scheme" />
+      <StatCard label="Tokens" value={tokens.join(', ')} sub="all available tokens" />
       {forcedToken && (
-        <StatCard
-          label="Forced Token"
-          value={forcedToken}
-          sub="page-level override"
-        />
+        <StatCard label="Forced Token" value={forcedToken} sub="page-level override" />
       )}
     </div>
   );
@@ -91,9 +79,8 @@ export default function Page() {
           Multi-instance token provider for react <em>&amp; next.js</em>
         </h1>
         <p className="page-hero-desc">
-          Independent, typed, zero-fouc context providers for theme, accent,
-          locale, or any discrete token — each backed by its own localstorage
-          key and inline hydration script.
+          Independent, typed, zero-fouc context providers for theme, accent, locale, or any discrete
+          token — each backed by its own localstorage key and inline hydration script.
         </p>
       </section>
 
@@ -113,10 +100,9 @@ export default function Page() {
           <span className="section-badge">useAccent()</span>
         </div>
         <p>
-          A second independent provider running under{' '}
-          <code>storageKey="accent"</code>. The two providers share zero state.
-          It supports infinitely many providers, each with their own discrete
-          tokens and storage keys.
+          A second independent provider running under <code>storageKey="accent"</code>. The two
+          providers share zero state. It supports infinitely many providers, each with their own
+          discrete tokens and storage keys.
         </p>
       </section>
 
@@ -127,9 +113,9 @@ export default function Page() {
           <span className="section-badge">forcedToken</span>
         </div>
         <p>
-          This page-level override forces the token to 'dark' on this page only,
-          ignoring the user's saved preference. Useful for demos, previews, or
-          any time you want to temporarily ignore the user's saved token.
+          This page-level override forces the token to 'dark' on this page only, ignoring the user's
+          saved preference. Useful for demos, previews, or any time you want to temporarily ignore
+          the user's saved token.
           <br />
           Return to Home: <a href="/">Here</a>.
         </p>
@@ -143,9 +129,7 @@ export default function Page() {
         </div>
         <div className="code-block">
           <pre>
-            <span className="token-comment">
-              // providers/theme-provider.tsx
-            </span>
+            <span className="token-comment">// providers/theme-provider.tsx</span>
             <br />
             <span className="token-keyword">import</span>{' '}
             <span className="token-punctuation">{'{ '}</span>
@@ -159,12 +143,9 @@ export default function Page() {
             <span className="token-comment">// define your token type</span>
             <br />
             <span className="token-keyword">export type</span>{' '}
-            <span className="token-type">Theme</span>{' '}
-            <span className="token-operator">=</span>{' '}
-            <span className="token-string">'light'</span>{' '}
-            <span className="token-operator">|</span>{' '}
-            <span className="token-string">'dark'</span>{' '}
-            <span className="token-operator">|</span>{' '}
+            <span className="token-type">Theme</span> <span className="token-operator">=</span>{' '}
+            <span className="token-string">'light'</span> <span className="token-operator">|</span>{' '}
+            <span className="token-string">'dark'</span> <span className="token-operator">|</span>{' '}
             <span className="token-string">'system'</span>
             <span className="token-punctuation">{';'}</span>
             <br />
@@ -199,8 +180,7 @@ export default function Page() {
             &nbsp;&nbsp;<span className="token-comment">/* options */</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">storageKey</span>
-            <span className="token-operator">:</span>{' '}
-            <span className="token-string">'theme'</span>
+            <span className="token-operator">:</span> <span className="token-string">'theme'</span>
             <span className="token-punctuation">,</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">attribute</span>
@@ -209,18 +189,15 @@ export default function Page() {
             <span className="token-punctuation">,</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">defaultToken</span>
-            <span className="token-operator">:</span>{' '}
-            <span className="token-string">'system'</span>
+            <span className="token-operator">:</span> <span className="token-string">'system'</span>
             <span className="token-punctuation">,</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">enableSystem</span>
-            <span className="token-operator">:</span>{' '}
-            <span className="token-literal">true</span>
+            <span className="token-operator">:</span> <span className="token-literal">true</span>
             <span className="token-punctuation">,</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">enableColorscheme</span>
-            <span className="token-operator">:</span>{' '}
-            <span className="token-literal">true</span>
+            <span className="token-operator">:</span> <span className="token-literal">true</span>
             <span className="token-punctuation">,</span>
             <br />
             &nbsp;&nbsp;<span className="token-member">tokens</span>
@@ -234,15 +211,12 @@ export default function Page() {
             <br />
             &nbsp;&nbsp;
             <span className="token-member">disableTransitionOnChange</span>
-            <span className="token-operator">:</span>{' '}
-            <span className="token-literal">true</span>
+            <span className="token-operator">:</span> <span className="token-literal">true</span>
             <span className="token-punctuation">,</span>
             <br />
             <span className="token-punctuation">{'});'}</span> <br />
             <br />
-            <span className="token-comment">
-              // export your provider, hook, and context
-            </span>
+            <span className="token-comment">// export your provider, hook, and context</span>
             <br />
             <span className="token-keyword">export</span>{' '}
             <span className="token-punctuation">{'{ '}</span>

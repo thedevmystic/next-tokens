@@ -69,10 +69,7 @@ const registry = new Map<string, AnyTokenContext>();
  */
 function getOrCreateContext(key: string): AnyTokenContext {
   if (!registry.has(key)) {
-    registry.set(
-      key,
-      createContext<UseTokenProps<string> | undefined>(undefined),
-    );
+    registry.set(key, createContext<UseTokenProps<string> | undefined>(undefined));
   }
   return registry.get(key)!;
 }
@@ -92,9 +89,7 @@ const defaultValue: UseTokenProps<string> = {
 /**
  * Low-level hook. Reads the provider registered under storageKey.
  */
-export function useToken<T extends string = string>(
-  storageKey = 'token',
-): UseTokenProps<T> {
+export function useToken<T extends string = string>(storageKey = 'token'): UseTokenProps<T> {
   const ctx = getOrCreateContext(storageKey);
   return (useContext(ctx) ?? (defaultValue as unknown)) as UseTokenProps<T>;
 }
@@ -102,9 +97,7 @@ export function useToken<T extends string = string>(
 /**
  * Produces a pre-bound, correctly typed hook alias for a storageKey.
  */
-export function makeTokenHook<T extends string>(
-  storageKey: string,
-): () => UseTokenProps<T> {
+export function makeTokenHook<T extends string>(storageKey: string): () => UseTokenProps<T> {
   return function useTokenAlias() {
     return useToken<T>(storageKey);
   };
@@ -118,9 +111,7 @@ export function makeTokenHook<T extends string>(
  * @see createTokenProvider for a factory that returns a pre-configured Provider
  *                          and hook alias.
  */
-export function TokenProvider<T extends string = string>(
-  props: TokenProviderProps<T>,
-) {
+export function TokenProvider<T extends string = string>(props: TokenProviderProps<T>) {
   return <TokenImpl {...props} />;
 }
 
@@ -144,9 +135,7 @@ export function createTokenProvider<T extends string>(
   /** A typed hook pre-bound to the factory's storageKey. */
   const useToken = makeTokenHook<T>(defaults.storageKey);
   /** The raw context is exposed to for use(Context). */
-  const context = getOrCreateContext(defaults.storageKey) as Context<
-    UseTokenProps<T> | undefined
-  >;
+  const context = getOrCreateContext(defaults.storageKey) as Context<UseTokenProps<T> | undefined>;
 
   return {
     Provider,
@@ -257,14 +246,9 @@ function TokenImpl<T extends string>({
   const isRoot = parent === undefined;
 
   /** Forced child tracking */
-  const [forcedOverride, setForcedOverride] = useState<T | undefined>(
-    undefined,
-  );
+  const [forcedOverride, setForcedOverride] = useState<T | undefined>(undefined);
   /** Register/unregister functions for children to override the token. */
-  const registerForced = useCallback(
-    (token: T) => setForcedOverride(token),
-    [],
-  );
+  const registerForced = useCallback((token: T) => setForcedOverride(token), []);
   const unregisterForced = useCallback(() => setForcedOverride(undefined), []);
 
   /** Set on mount */
@@ -315,9 +299,7 @@ function TokenImpl<T extends string>({
         raw === 'system' && enableSystem ? getSystemToken() : (raw as string);
 
       const mapped = value?.[resolved] ?? resolved;
-      const reenable = disableTransitionOnChange
-        ? disableAnimation(nonce)
-        : null;
+      const reenable = disableTransitionOnChange ? disableAnimation(nonce) : null;
       const root = document.documentElement;
 
       const applyAttr = (attr: Attribute) => {
@@ -329,17 +311,13 @@ function TokenImpl<T extends string>({
         }
       };
 
-      Array.isArray(attribute)
-        ? attribute.forEach(applyAttr)
-        : applyAttr(attribute);
+      Array.isArray(attribute) ? attribute.forEach(applyAttr) : applyAttr(attribute);
 
       if (enableColorScheme) {
         const fallback = COLOR_SCHEMES.includes(defaultToken as never)
           ? (defaultToken as string)
           : null;
-        const scheme = COLOR_SCHEMES.includes(resolved as never)
-          ? resolved
-          : fallback;
+        const scheme = COLOR_SCHEMES.includes(resolved as never) ? resolved : fallback;
         root.style.colorScheme = scheme ?? '';
       }
 
@@ -370,15 +348,7 @@ function TokenImpl<T extends string>({
     if (!isMounted) return;
     if (isRoot && forcedOverride) return;
     applyToken(forcedToken ?? token);
-  }, [
-    isMounted,
-    isRoot,
-    forcedToken,
-    forcedOverride,
-    token,
-    systemToken,
-    applyToken,
-  ]);
+  }, [isMounted, isRoot, forcedToken, forcedOverride, token, systemToken, applyToken]);
 
   /**
    * Token setter that updates state and localStorage.
@@ -516,10 +486,4 @@ export const TokenScript = memo(function TokenScript({
 });
 
 /** Re-export types for external use. */
-export type {
-  Attribute,
-  TokenProviderFactory,
-  TokenProviderProps,
-  TokenSetter,
-  UseTokenProps,
-};
+export type { Attribute, TokenProviderFactory, TokenProviderProps, TokenSetter, UseTokenProps };
