@@ -29,6 +29,7 @@ import type { Metadata } from 'next';
 
 import { ThemeProvider } from '@example/providers/theme-provider';
 import { AccentProvider } from '@example/providers/accent-provider';
+import { BatchScript } from '@example/providers/batch-script';
 
 import { ThemeSwitcher } from '@example/components/theme-switcher';
 import { AccentSwitcher } from '@example/components/accent-switcher';
@@ -45,6 +46,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <BatchScript />
+      </head>
       <body>
         <ThemeProvider>
           <AccentProvider>

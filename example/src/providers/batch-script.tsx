@@ -14,9 +14,9 @@
  *
  * ------------------------------------------------------------------------------------------------------
  *
- * @path [ROOT]/example/src/providers/accent-provider.tsx
- * @file accent-provider.tsx
- * @description Accent provider.
+ * @path [ROOT]/example/src/providers/batch-script.tsx
+ * @file batch-script.tsx
+ * @description Batch script for providers.
  *
  * @author thedevmystic (Surya)
  * @copyright 2026-present Suryansh Singh Apache-2.0 License
@@ -25,26 +25,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-'use client';
+import { BatchedTokenScript } from 'next-tokens';
 
-import { createTokenProvider } from 'next-tokens';
-
-/** All supported accent type */
-export type Accent = 'terracotta' | 'sage' | 'slate' | 'amber';
-
-/** Accent Provider */
-const {
-  Provider: AccentProvider,
-  useToken: useAccent,
-  context: accentContext,
-} = createTokenProvider<Accent>({
-  storageKey: 'accent',
-  attribute: 'data-accent',
-  tokens: ['terracotta', 'sage', 'slate', 'amber'],
-  defaultToken: 'terracotta',
-  enableSystem: false,
-  enableColorScheme: false,
-  skipScript: true,
-});
-
-export { AccentProvider, useAccent, accentContext };
+export const BatchScript = () => {
+  return (
+    <BatchedTokenScript
+      instances={[
+        {
+          storageKey: 'theme',
+          attribute: 'data-theme',
+          tokens: ['light', 'dark'],
+          defaultToken: 'system',
+          enableSystem: true,
+          enableColorScheme: true,
+        },
+        {
+          storageKey: 'accent',
+          attribute: 'data-accent',
+          tokens: ['blue', 'purple', 'amber'],
+          defaultToken: 'blue',
+          enableSystem: false,
+          enableColorScheme: false,
+        },
+      ]}
+    />
+  );
+};

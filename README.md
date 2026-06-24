@@ -115,6 +115,7 @@ You can think of it like `next-themes` but with the support of multiple provider
 
 - **Multi-Instance:** Run multiple providers (Theme, Accent, etc.) side-by-side.
 - **Zero Flash:** Injects a blocking script to apply tokens before the page paints.
+- **Batched Script Injection:** Optionally merge scripts across instances to trade $N$ scripts for just one.
 - **Type Safe:** First-class TypeScript support with generics for your custom token values.
 - **System Preference:** Syncs with `prefers-color-scheme` automatically.
 - **Storage Sync:** Synchronizes changes across multiple browser tabs.
@@ -320,6 +321,13 @@ const { token, setToken } = use(themeContext);
 - `value`: Remap token names to attribute values. See [Example - Value Remap](#example---value-remap).
 - `nonce`: CSP nonce forwarded to the inline hydration script. See [Example - Nonce](#example---nonce).
 - `scriptProps`: Extra props forwarded to the inline `<script>` tag. See [Example - Script](#example---script).
+- `skipScript`: Skip rendering this instance's own inline hydration `<script>`. Set to `true` when using `BatchedTokenScript`. Defaults to `false`. See [Example - Batched Injection](#example---batched-injection).
+
+### BatchedTokenScript
+
+- `instances`: An array of fully resolved `TokenScriptConfig` objects representing each provider instance.
+- `nonce`: CSP nonce forwarded to the merged inline `<script>` tag.
+- `scriptProps`: Extra props forwarded to the merged inline `<script>` tag.
 
 ### useToken
 
@@ -683,6 +691,55 @@ You can pass additional props to the injected `<script>` tag via `scriptProps`. 
 <ThemeProvider scriptProps={{ 'data-cfasync': 'false' }}>
 ```
 
+## Example - Batched Injection
+
+By default, every `TokenProvider` instance injects its own minimal, blocking hydration script into the document `<head>`. While these scripts are highly optimized, running several independent tokens (e.g., theme, accent, density, contrast) means executing multiple distinct scripts and triggering multiple sequential `localStorage` reads.
+
+`next-tokens` provides an optional helper component, `<BatchedTokenScript />`, which groups configuration values across your token instances and compiles them into a **single inline script**. This trades $N$ script insertions and $N$ blocking lookups for exactly one of each.
+
+To opt in, pass `skipScript` to all corresponding `TokenProvider` instances so they do not duplicate the hydration phase:
+
+```tsx
+// app/layout.tsx
+import { TokenProvider, BatchedTokenScript } from 'next-tokens';
+
+export default function RootLayout({ children }) {
+  return (
+    <html suppressHydrationWarning>
+      <head>
+        <BatchedTokenScript
+          instances={[
+            {
+              storageKey: 'theme',
+              attribute: 'data-theme',
+              tokens: ['light', 'dark'],
+              defaultToken: 'system',
+              enableSystem: true,
+              enableColorScheme: true,
+            },
+            {
+              storageKey: 'accent',
+              attribute: 'data-accent',
+              tokens: ['blue', 'purple', 'amber'],
+              defaultToken: 'blue',
+              enableSystem: false,
+              enableColorScheme: false,
+            },
+          ]}
+        />
+      </head>
+      <body>
+        {/* Pass skipScript so providers defer early hydration to the batch controller */}
+        <TokenProvider storageKey="theme" attribute="data-theme" skipScript>
+          <TokenProvider storageKey="accent" attribute="data-accent" enableSystem={false} skipScript>
+            {children}
+          </TokenProvider>
+        </TokenProvider>
+      </body>
+    </html>
+  );
+}
+
 # Discussion
 
 ## The Flash
@@ -750,6 +807,10 @@ Yes, this is because each provider share nothing and are independent. So, differ
 **Can I use this with Gatsby or Vite?**
 
 `next-tokens` is built for Next.js App Router. The blocking script injection relies on Next.js rendering behavior and may not work correctly in other frameworks.
+
+**Are separate scripts injected for different providers?**
+
+Yes, by default, each `TokenProvider` instance operates independently and renders its own targeted hydration script. However, if you are utilizing 3 or more token domains and wish to consolidate blocking operations, you can use the `<BatchedTokenScript />` helper alongside `skipScript` to compress everything down into a single execution step. See [Example - Batched Injection](#example---batched-injection)
 
 ---
 

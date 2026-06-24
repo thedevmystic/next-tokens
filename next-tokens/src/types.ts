@@ -30,7 +30,7 @@ import type { ReactNode, ComponentPropsWithoutRef, Context } from 'react';
 /**
  * A mapping of token names to attribute values.
  */
-interface ValueObject {
+export interface ValueObject {
   [tokenName: string]: string;
 }
 
@@ -108,6 +108,16 @@ export interface TokenProviderProps<T extends string = string> {
   nonce?: string;
   /** Extra props forwarded to the inline <script> tag */
   scriptProps?: ScriptProps;
+  /**
+   * Skip rendering this instance's own inline hydration <script>.
+   *
+   * Set this when you're merging multiple TokenProvider instances into a
+   * single createBatchedTokenScript call instead — leaving it false (the
+   * default) keeps the existing single-script-per-provider behavior exactly
+   * as-is, so this is purely opt-in and does not change behavior for any
+   * existing usage. Default: false.
+   */
+  skipScript?: boolean;
 }
 
 /**
@@ -121,4 +131,58 @@ export interface TokenProviderFactory<T extends string = string> {
   useToken: () => UseTokenProps<T>;
   /** The raw React context object. */
   context: Context<UseTokenProps<T> | undefined>;
+}
+
+/**
+ * The resolved, generic-erased shape of a single instance's config once all
+ * TokenProviderProps defaults have been applied — everything the inline
+ * hydration script needs to know to set that one instance's attribute(s)
+ * before paint.
+ */
+export interface TokenScriptConfig {
+  /** localStorage key for this instance. Must be unique across all instances. */
+  storageKey: string;
+  /** The HTML attribute (or array of attributes) written to <html>. */
+  attribute: Attribute | Attribute[];
+  /** Follow the OS prefers-color-scheme and expose a 'system' pseudo-token. */
+  enableSystem: boolean;
+  /** Reflect the active color scheme to the browser for native UI. */
+  enableColorScheme: boolean;
+  /** Initial token when nothing is stored. */
+  defaultToken: string;
+  /** Force a specific token on this subtree, ignoring user preference. */
+  forcedToken?: string;
+  /** Remap token names to attribute values. */
+  value?: ValueObject;
+  /** All valid token values. */
+  tokens: string[];
+}
+
+/**
+ * Props for the single-instance TokenScript component. Extends the shared
+ * config shape with the script-tag-specific props.
+ */
+export interface TokenScriptProps extends TokenScriptConfig {
+  /** CSP nonce forwarded to the inline hydration script */
+  nonce?: string;
+  /** Extra props forwarded to the inline <script> tag */
+  scriptProps?: ScriptProps;
+}
+
+/**
+ * Props for the optional createBatchedTokenScript helper.
+ *
+ * Accepts one resolved TokenScriptConfig per instance (theme, accent,
+ * density, ...) and merges them into a single inline <script>, trading N
+ * blocking script tags + N localStorage reads for one of each. Pair this
+ * with `skipScript: true` on every corresponding TokenProvider so each
+ * instance doesn't also render its own script.
+ */
+export interface BatchedTokenScriptProps {
+  /** One resolved config entry per token instance, in render order. */
+  instances: TokenScriptConfig[];
+  /** CSP nonce forwarded to the merged inline <script> tag */
+  nonce?: string;
+  /** Extra props forwarded to the merged <script> tag */
+  scriptProps?: ScriptProps;
 }

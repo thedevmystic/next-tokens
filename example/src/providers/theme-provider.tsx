@@ -45,6 +45,7 @@ const {
   enableColorScheme: true,
   tokens: ['light', 'dark'],
   disableTransitionOnChange: false,
+  skipScript: true,
 });
 
 export { ThemeProvider, useTheme, themeContext };

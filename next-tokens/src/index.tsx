@@ -44,13 +44,17 @@ import { preinit } from 'react-dom';
 
 import type {
   Attribute,
+  BatchedTokenScriptProps,
   ScriptProps,
   TokenProviderFactory,
   TokenProviderProps,
+  TokenScriptConfig,
+  TokenScriptProps,
   TokenSetter,
   UseTokenProps,
+  ValueObject,
 } from './types';
-import { script } from './script';
+import { batchScript, script } from './script';
 
 /**
  * Constant colorscheme values and media query.
@@ -225,6 +229,7 @@ function TokenImpl<T extends string>({
   children,
   nonce,
   scriptProps,
+  skipScript = false,
 }: TokenProviderProps<T>) {
   /** Check if the component is mounted to avoid hydration mismatches. */
   const isMounted = useIsMounted();
@@ -410,37 +415,23 @@ function TokenImpl<T extends string>({
 
   return (
     <Ctx.Provider value={contextValue as unknown as UseTokenProps<string>}>
-      <TokenScript
-        forcedToken={forcedToken as string | undefined}
-        storageKey={storageKey}
-        attribute={attribute}
-        enableSystem={enableSystem}
-        enableColorScheme={enableColorScheme}
-        defaultToken={defaultToken as string}
-        value={value}
-        tokens={tokens as string[]}
-        nonce={nonce}
-        scriptProps={scriptProps}
-      />
+      {!skipScript && (
+        <TokenScript
+          forcedToken={forcedToken as string | undefined}
+          storageKey={storageKey}
+          attribute={attribute}
+          enableSystem={enableSystem}
+          enableColorScheme={enableColorScheme}
+          defaultToken={defaultToken as string}
+          value={value}
+          tokens={tokens as string[]}
+          nonce={nonce}
+          scriptProps={scriptProps}
+        />
+      )}
       {children}
     </Ctx.Provider>
   );
-}
-
-/**
- * Props for the TokenScript component.
- */
-interface TokenScriptProps {
-  forcedToken?: string;
-  storageKey: string;
-  attribute: Attribute | Attribute[];
-  enableSystem: boolean;
-  enableColorScheme: boolean;
-  defaultToken: string;
-  value?: Record<string, string>;
-  tokens: string[];
-  nonce?: string;
-  scriptProps?: ScriptProps;
 }
 
 /**
@@ -485,5 +476,75 @@ export const TokenScript = memo(function TokenScript({
   return null; // This component does not render anything itself
 });
 
+/**
+ * Optional helper that merges multiple TokenProvider instances' hydration
+ * scripts into a single inline <script> — trading N blocking scripts + N
+ * localStorage reads for one of each.
+ *
+ * @example
+ * ```tsx
+ * <BatchedTokenScript
+ *   instances={[
+ *     { storageKey: 'token', attribute: 'data-token', tokens: ['light', 'dark'], defaultToken: 'system', enableSystem: true, enableColorScheme: true },
+ *     { storageKey: 'accent', attribute: 'data-accent', tokens: ['blue', 'red', 'green'], defaultToken: 'blue', enableSystem: false, enableColorScheme: false },
+ *   ]}
+ * />
+ * <TokenProvider storageKey="token" attribute="data-token" skipScript />
+ * <TokenProvider storageKey="accent" attribute="data-accent" enableSystem={false} skipScript />
+ * ```
+ */
+export const BatchedTokenScript = memo(function BatchedTokenScript({
+  instances,
+  nonce,
+  scriptProps,
+}: BatchedTokenScriptProps) {
+  const tuples = instances.map(
+    ({
+      attribute,
+      storageKey,
+      defaultToken,
+      forcedToken,
+      tokens,
+      value,
+      enableSystem,
+      enableColorScheme,
+    }) => [
+      attribute,
+      storageKey,
+      defaultToken,
+      forcedToken,
+      tokens,
+      value,
+      enableSystem,
+      enableColorScheme,
+    ],
+  );
+
+  const args = JSON.stringify(tuples);
+  const scriptContent = `(${batchScript.toString()})(${args})`;
+  const scriptURI = `data:text/javascript,${encodeURIComponent(scriptContent)}`;
+
+  preinit(scriptURI, {
+    as: 'script',
+    nonce: nonce || '',
+    async: false,
+    defer: false,
+    ...scriptProps,
+  });
+
+  return null; // This component does not render anything itself
+});
+
 /** Re-export types for external use. */
-export type { Attribute, TokenProviderFactory, TokenProviderProps, TokenSetter, UseTokenProps };
+export type {
+  Attribute,
+  BatchedTokenScriptProps,
+  ScriptProps,
+  TokenProviderFactory,
+  TokenProviderProps,
+  TokenScriptConfig,
+  TokenScriptProps,
+  TokenSetter,
+  UseTokenProps,
+  ValueObject,
+};
