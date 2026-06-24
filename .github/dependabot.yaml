@@ -57,36 +57,3 @@ updates:
     commit-message:
       prefix: "fix(deps)"
       include: "scope"
-  # Maintain Next Tokens NPM Packages
-  - package-ecosystem: "npm"
-    directory: "/next-tokens"
-    schedule:
-      interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 5
-    groups:
-      next-tokens-npm-dependencies:
-        patterns:
-          - "*"
-    labels:
-      - "dependencies"
-    commit-message:
-      prefix: "fix(deps)"
-      include: "scope"
-  # Maintain Example NPM Packages
-  - package-ecosystem: "npm"
-    directory: "/example"
-    schedule:
-      interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 5
-    groups:
-      example-npm-dependencies:
-        patterns:
-          - "*"
-    labels:
-      - "dependencies"
-    commit-message:
-      prefix: "fix(deps)"
-      include: "scope"
-
