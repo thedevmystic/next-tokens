@@ -1,6 +1,6 @@
 {
   "name": "next-tokens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Multi-instance token provider for React 18+ supporting theme, accent, and beyond.",
   "license": "Apache-2.0",
   "author": "Suryansh Singh (thedevmystic)",
