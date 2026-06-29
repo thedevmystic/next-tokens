@@ -5,7 +5,4 @@ allowBuilds:
   '@swc/core': true
   esbuild: true
   sharp: true
-minimumReleaseAgeExclude:
-  - '@playwright/test@1.61.1'
-  - playwright-core@1.61.1
-  - playwright@1.61.1
+minimumReleaseAge: 0

@@ -40,7 +40,6 @@ import {
   useMemo,
   memo,
 } from 'react';
-import { preinit } from 'react-dom';
 
 import type {
   Attribute,
@@ -463,17 +462,10 @@ export const TokenScript = memo(function TokenScript({
   ]).slice(1, -1);
 
   const scriptContent = `(${script.toString()})(${args})`;
-  const scriptURI = `data:text/javascript,${encodeURIComponent(scriptContent)}`;
 
-  preinit(scriptURI, {
-    as: 'script',
-    nonce: nonce || '',
-    async: false,
-    defer: false,
-    ...scriptProps,
-  });
-
-  return null; // This component does not render anything itself
+  return (
+    <script nonce={nonce} {...scriptProps} dangerouslySetInnerHTML={{ __html: scriptContent }} />
+  );
 });
 
 /**
@@ -522,17 +514,10 @@ export const BatchedTokenScript = memo(function BatchedTokenScript({
 
   const args = JSON.stringify(tuples);
   const scriptContent = `(${batchScript.toString()})(${args})`;
-  const scriptURI = `data:text/javascript,${encodeURIComponent(scriptContent)}`;
 
-  preinit(scriptURI, {
-    as: 'script',
-    nonce: nonce || '',
-    async: false,
-    defer: false,
-    ...scriptProps,
-  });
-
-  return null; // This component does not render anything itself
+  return (
+    <script nonce={nonce} {...scriptProps} dangerouslySetInnerHTML={{ __html: scriptContent }} />
+  );
 });
 
 /** Re-export types for external use. */
