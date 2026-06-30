@@ -464,7 +464,12 @@ export const TokenScript = memo(function TokenScript({
   const scriptContent = `(${script.toString()})(${args})`;
 
   return (
-    <script nonce={nonce} {...scriptProps} dangerouslySetInnerHTML={{ __html: scriptContent }} />
+    <script
+      nonce={nonce}
+      {...scriptProps}
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: scriptContent }}
+    />
   );
 });
 
@@ -516,7 +521,12 @@ export const BatchedTokenScript = memo(function BatchedTokenScript({
   const scriptContent = `(${batchScript.toString()})(${args})`;
 
   return (
-    <script nonce={nonce} {...scriptProps} dangerouslySetInnerHTML={{ __html: scriptContent }} />
+    <script
+      nonce={nonce}
+      {...scriptProps}
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: scriptContent }}
+    />
   );
 });
 
