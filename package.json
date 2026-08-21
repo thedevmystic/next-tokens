@@ -1,7 +1,7 @@
 {
   "name": "next-tokens-monorepo",
   "private": true,
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@11.22.0",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -13,7 +13,7 @@
     "prepublishOnly": "pnpm lint && pnpm type-check && pnpm build && pnpm test"
   },
   "devDependencies": {
-    "prettier": "^3.8.4",
-    "turbo": "^2.9.18"
+    "prettier": "^3.9.6",
+    "turbo": "^2.10.11"
   }
 }

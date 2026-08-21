@@ -57,3 +57,5 @@ updates:
     commit-message:
       prefix: "fix(deps)"
       include: "scope"
+    ignore:
+      - dependency-name: "typescript"
