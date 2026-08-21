@@ -1,29 +1,4 @@
-/**
- * Copyright 2026-present Suryansh Singh
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * ------------------------------------------------------------------------------------------------------
- *
- * @path [ROOT]/testss/e2e/token-provider.test.ts
- * @file token-provider.test.ts
- * @description E2E Tests for TokenProvider.
- *
- * @author thedevmystic (Surya)
- * @copyright 2026-present Suryansh Singh Apache-2.0 License
- *
- * SPDX-FileCopyrightText: 2026-present Suryansh Singh
- * SPDX-License-Identifier: Apache-2.0
- */
+/* Token Provider E2E Tests */
 
 import { test, expect, Page, BrowserContext } from '@playwright/test';
 
@@ -187,8 +162,11 @@ test.describe('TokenProvider – forcedToken', () => {
     await page.goto(`${BASE_URL}/tests/forced`);
     await setLocalStorage(page, 'theme', 'light');
 
-    const attr = await getHtmlAttr(page, 'data-theme');
-    expect(attr).toBe('dark');
+    await expect
+      .poll(async () => {
+        return getHtmlAttr(page, 'data-theme');
+      })
+      .toBe('dark');
   });
 
   test('forced page does not change localStorage', async ({ page }) => {
@@ -311,13 +289,8 @@ test.describe('TokenProvider – inline script FOUC prevention', () => {
   });
 
   test('nonce is forwarded to script tag', async ({ page }) => {
-    // This route should render TokenProvider with nonce="test-nonce"
     await page.goto(`${BASE_URL}/tests/theme-nonce`);
-    const nonce = await page.evaluate(
-      () => document.querySelector('script[nonce]')?.getAttribute('nonce') ?? null,
-    );
-    // In the browser the nonce attribute is cleared for security, so we just
-    // confirm the script tag exists (nonce stripping is browser behaviour)
-    expect(nonce).not.toBeNull();
+    const nonce = await page.evaluate(() => document.querySelector('script')?.nonce ?? null);
+    expect(nonce).not.toBe(null);
   });
 });

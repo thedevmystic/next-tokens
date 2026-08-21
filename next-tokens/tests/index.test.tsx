@@ -1,43 +1,10 @@
-/**
- * Copyright 2026-present Suryansh Singh
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * ------------------------------------------------------------------------------------------------------
- *
- * @path [ROOT]/next-tokens/tests/index.test.tsx
- * @file index.test.tsx
- * @description Tests for components from index.tsx
- *
- * @author thedevmystic (Surya)
- * @copyright 2026-present Suryansh Singh Apache-2.0 License
- *
- * SPDX-FileCopyrightText: 2026-present Suryansh Singh
- * SPDX-License-Identifier: Apache-2.0
- */
+/* Main components tests */
 
-import React from 'react';
-import * as ReactDOM from 'react-dom';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
-import {
-  TokenProvider,
-  createTokenProvider,
-  useToken,
-  makeTokenHook,
-  TokenScript,
-} from '../src/index';
+import { TokenProvider, createTokenProvider, useToken, makeTokenHook } from '../src/index';
 
 /** Mock Preinit */
 vi.mock('react-dom', async () => {
@@ -46,21 +13,6 @@ vi.mock('react-dom', async () => {
     ...actual,
     preinit: vi.fn(),
   };
-});
-
-/** Suppress the JSDOM "not implemented" for matchMedia. */
-beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
 });
 
 /** Reset localStorage between tests. */
@@ -447,55 +399,41 @@ describe('createTokenProvider', () => {
 
 /** TokenScript Tests. */
 describe('TokenScript', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('calls preinit with a data URI', () => {
-    render(
+  it('renders an inline script tag', () => {
+    const { container } = render(
       <TokenProvider storageKey="theme" tokens={['light', 'dark']}>
         <div>Children</div>
       </TokenProvider>,
     );
 
-    // Verify preinit was called
-    expect(ReactDOM.preinit).toHaveBeenCalled();
-
-    // Verify the first argument is a data: URI containing the script
-    const [uri] = vi.mocked(ReactDOM.preinit).mock.calls[0];
-    expect(uri).toContain('data:text/javascript');
+    const scriptEl = container.querySelector('script');
+    expect(scriptEl).toBeInTheDocument();
+    expect(scriptEl?.innerHTML).toContain('theme');
   });
 
-  it('passes the correct options to preinit', () => {
+  it('passes the correct options and nonce to the script tag', () => {
     const scriptProps = { 'data-test': 'value' };
-    render(
+    const { container } = render(
       <TokenProvider storageKey="theme" nonce="test-nonce" scriptProps={scriptProps}>
         <div>Children</div>
       </TokenProvider>,
     );
 
-    // Verify the options object (second argument)
-    const [, options] = vi.mocked(ReactDOM.preinit).mock.calls[0];
-    expect(options).toMatchObject({
-      as: 'script',
-      nonce: 'test-nonce',
-      async: false,
-      ...scriptProps,
-    });
+    const scriptEl = container.querySelector('script');
+    expect(scriptEl).toHaveAttribute('nonce', 'test-nonce');
+    expect(scriptEl).toHaveAttribute('data-test', 'value');
   });
 
-  it('injects serialised script arguments into the URI', () => {
+  it('injects serialised script arguments into the script content', () => {
     const storageKey = 'my-custom-key';
-    render(
+    const { container } = render(
       <TokenProvider storageKey={storageKey}>
         <div>Children</div>
       </TokenProvider>,
     );
 
-    const [uri] = vi.mocked(ReactDOM.preinit).mock.calls[0];
-    const decodedUri = decodeURIComponent(uri as string);
-
-    expect(decodedUri).toContain(storageKey);
+    const scriptEl = container.querySelector('script');
+    expect(scriptEl?.innerHTML).toContain(storageKey);
   });
 });
 

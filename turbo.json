@@ -4,27 +4,23 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["example"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "build:package": {
-      "dependsOn": ["^build"],
-      "inputs": ["next-tokens/src/**", "next-tokens/tsup.config.ts", "next-tokens/tsconfig.json", "tsconfig.json"],
-      "outputs": ["next-tokens/dist/**"]
+      "inputs": ["src/**", "tsconfig.json", "package.json", "pnpm-lock.yaml"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "type-check": {
       "cache": true
     },
     "test:unit": {
       "dependsOn": ["build"],
-      "inputs": ["next-tokens/src/**", "next-tokens/tests/**", "next-tokens/vitest.config.ts"],
+      "inputs": ["src/**", "tests/**", "vitest.config.ts"],
       "cache": false,
       "outputs": []
     },
     "test:e2e": {
       "dependsOn": ["build"],
-      "inputs": ["example/src/**", "example/tests/**", "playwright.config.ts"],
-      "cache": false
+      "inputs": ["src/**", "tests/**", "playwright.config.ts"],
+      "cache": false,
+      "outputs": []
     },
     "dev": {
       "cache": false,

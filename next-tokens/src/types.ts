@@ -14,7 +14,6 @@
  *
  * ------------------------------------------------------------------------------------------------------
  *
- * @path [ROOT]/next-tokens/src/types.ts
  * @file types.ts
  * @description Types for token provider.
  *

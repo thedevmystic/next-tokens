@@ -30,4 +30,4 @@ jobs:
           CI: true
 
       - name: Run lint
-        run: pnpm lint
+        run: pnpm run lint

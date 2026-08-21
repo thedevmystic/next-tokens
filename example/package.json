@@ -7,16 +7,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:webpack": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
-    "test:e2e": "playwright test",
+    "lint": "prettier --write . --ignore-path ../.prettierignore",
+    "test:e2e": "start-server-and-test start http://localhost:3000 \"playwright test\"",
     "test": "pnpm test:e2e"
   },
   "dependencies": {
-    "next-tokens": "workspace:*",
     "next": "^16.2.9",
+    "next-tokens": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
@@ -25,6 +25,7 @@
     "@types/node": "^26.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "start-server-and-test": "^3.0.12",
     "typescript": "^6.0.3"
   },
   "engines": {

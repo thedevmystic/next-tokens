@@ -14,7 +14,6 @@
  *
  * ------------------------------------------------------------------------------------------------------
  *
- * @path [ROOT]/next-tokens/src/index.tsx
  * @file index.tsx
  * @description Multi-instance token provider. A modern library built to support
  *              multiple independent providers (theme, accent, lang, etc.)
@@ -38,6 +37,7 @@ import {
   useSyncExternalStore,
   useCallback,
   useMemo,
+  useRef,
   memo,
 } from 'react';
 
@@ -109,8 +109,8 @@ export function makeTokenHook<T extends string>(storageKey: string): () => UseTo
 /**
  * Multi-instance token provider. Wrapping the same storageKey twice is a no-op.
  *
- * @param {TokenProviderProps} props - The provider props.
- * @returns {JSX.Element} The provider component.
+ * @param props - The provider props.
+ * @returns The provider component.
  * @see createTokenProvider for a factory that returns a pre-configured Provider
  *                          and hook alias.
  */
@@ -251,14 +251,25 @@ function TokenImpl<T extends string>({
 
   /** Forced child tracking */
   const [forcedOverride, setForcedOverride] = useState<T | undefined>(undefined);
+  const forcedOverrideRef = useRef<T | undefined>(undefined);
   /** Register/unregister functions for children to override the token. */
-  const registerForced = useCallback((token: T) => setForcedOverride(token), []);
-  const unregisterForced = useCallback(() => setForcedOverride(undefined), []);
+  const registerForced = useCallback((token: T) => {
+    forcedOverrideRef.current = token;
+    setForcedOverride(token);
+  }, []);
+  const unregisterForced = useCallback(() => {
+    forcedOverrideRef.current = undefined;
+    setForcedOverride(undefined);
+  }, []);
 
   /** Set on mount */
   useEffect(() => {
-    if (!isMounted || forcedToken) {
+    if (!isMounted) {
       setTokenState(defaultToken as T);
+    }
+    if (forcedToken) {
+      setTokenState(forcedToken as T);
+      return;
     }
     const stored = readFromStorage(storageKey);
     setTokenState((stored ?? defaultToken) as T);
@@ -350,7 +361,7 @@ function TokenImpl<T extends string>({
   /** Apply the token on mount and whenever it changes. */
   useEffect(() => {
     if (!isMounted) return;
-    if (isRoot && forcedOverride) return;
+    if (isRoot && forcedOverrideRef.current) return;
     applyToken(forcedToken ?? token);
   }, [isMounted, isRoot, forcedToken, forcedOverride, token, systemToken, applyToken]);
 
@@ -363,7 +374,7 @@ function TokenImpl<T extends string>({
       if (forcedToken) return;
       const next = typeof update === 'function' ? update(token) : update;
       saveToStorage(storageKey, next);
-      if (!(isRoot && forcedOverride)) {
+      if (!(isRoot && forcedOverrideRef.current)) {
         applyToken(next as T);
       }
       setTokenState(next as T);

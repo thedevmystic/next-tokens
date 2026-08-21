@@ -31,7 +31,7 @@ jobs:
           CI: true
 
       - name: Setup Playwright
-        run: pnpm --filter example exec playwright install --with-deps
+        run: pnpm --filter next-tokens-example exec playwright install --with-deps
 
       - name: Run tests
-        run: pnpm --filter example test
+        run: pnpm run test:e2e

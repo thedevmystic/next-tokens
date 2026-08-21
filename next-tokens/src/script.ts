@@ -14,7 +14,6 @@
  *
  * ------------------------------------------------------------------------------------------------------
  *
- * @path [ROOT]/next-tokens/src/script.ts
  * @file script.ts
  * @description Inline script to set the initial theme on the server to prevent
  *              FOUC due to React hydration delay.
@@ -25,6 +24,7 @@
  * SPDX-FileCopyrightText: 2026-present Suryansh Singh
  * SPDX-License-Identifier: Apache-2.0
  */
+
 /**
  * Script to be injected as an inline <script> on the server to set the initial
  * theme before React hydration to avoid FOUC.
@@ -136,7 +136,16 @@ export const batchScript = (instances: BatchedInstanceTuple[]) => {
   }
 
   instances.forEach(
-    ([attribute, storageKey, defaultToken, forcedToken, tokens, value, enableSystem, enableColorScheme]) => {
+    ([
+      attribute,
+      storageKey,
+      defaultToken,
+      forcedToken,
+      tokens,
+      value,
+      enableSystem,
+      enableColorScheme,
+    ]) => {
       if (forcedToken) {
         updateDOM(attribute, tokens, value, enableColorScheme, forcedToken);
         return;

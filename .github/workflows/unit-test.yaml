@@ -30,4 +30,4 @@ jobs:
           CI: true
 
       - name: Run tests
-        run: pnpm --filter next-tokens test
+        run: pnpm run test:unit
