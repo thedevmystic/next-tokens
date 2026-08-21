@@ -26,7 +26,7 @@
     alt="TypeScript"
   />
   <img
-    src="https://img.shields.io/badge/size-1.9_KB-blue?style=flat-square"
+    src="https://img.shields.io/badge/size-2.1_KB-blue?style=flat-square"
     alt="Size"
   />
   <br />
@@ -120,7 +120,7 @@ You can think of it like `next-themes` but with the support of multiple provider
 - **System Preference:** Syncs with `prefers-color-scheme` automatically.
 - **Storage Sync:** Synchronizes changes across multiple browser tabs.
 - **Effortless Nesting:** Supports nesting of providers seamlessly.
-- **Light-weight:** Only 1.9 KBs of disk space needed for a headache-free token system.
+- **Light-weight:** Only 2.1 KBs of disk space needed for a headache-free token system.
 
 # Installation
 
